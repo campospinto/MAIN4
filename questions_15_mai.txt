@@ -1,0 +1,19 @@
+questions pour le TP du 15 mai:
+
+le sujet porte sur l'equation de la chaleur 
+
+d/dt u - nu*(d/dx)^2 u = f
+
+(avec conditions Dirichlet homogenes au bord du segment [0,1])
+
+1) corriger le script pour calculer la solution par Elements Finis
+
+2) calculer des erreurs de troncatures locales sur le meme principe que dans le TP 2.
+On utilisera ici un schema de DF explicite pour definir ces erreurs de troncature.
+Le script doit ensuite calculer ces erreurs pour les solutions EF avec plusieurs valeurs pour les parametres Nt et Nx.
+
+
+3) sur le modele de la fonction "calcul_schema_EF", ecrire une fonction "calcul_schema_DF" qui applique un schema de DF implicite pour l'equation de la chaleur.
+(on pourra egalement appliquer le calcul des erreurs locales sur cette solution, et comparer les erreurs obtenues avec celles de la solution EF).
+
+
