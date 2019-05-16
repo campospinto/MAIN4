@@ -126,24 +126,18 @@ def assemble_K(Nx):
     col = list()
     data = list()
 
+    # on rappelle: range(1, Nx) = { 1, ..., Nx-1 }
     for i in range(1,Nx):
-        # range(1, Nx) = { 1, ..., Nx-1 }
-
-        if i > 1:
-            j=i
-            row.append(j-2)  
-            col.append(j-1)  
-            data.append(-Nx)   # A_{j-1,j}    (j=i+1)
+        for j in range(1,Nx):
+            if i == j:
+                row.append(i-1)  
+                col.append(j-1)  
+                data.append(2*Nx)  # valeurs sur la diagonale principale    
+            elif abs(i-j) == 1:
+                row.append(i-1)
+                col.append(j-1)
+                data.append(-Nx) # valeurs sur les diagonales |i-j| = 1
     
-        row.append(i-1)
-        col.append(i-1)
-        data.append(2*Nx)       # A_{i,i}
-    
-        if i > 1:
-            row.append(i-1)  
-            col.append(i-2)   
-            data.append(-Nx)  # A_{i,i-1}  (j=i-1)
-
     row = numpy.array(row)
     col = numpy.array(col)
     data = numpy.array(data)      
@@ -157,24 +151,18 @@ def assemble_M(Nx):
 
     h = 1./Nx
 
+    # on rappelle: range(1, Nx) = { 1, ..., Nx-1 }
     for i in range(1,Nx):
-        # range(1, Nx) = { 1, ..., Nx-1 }
-        
-        if i > 1:
-            j=i
-            row.append(j-2)  
-            col.append(j-1)  
-            data.append(h/6)   # M_{j-1,j}    (j=i+1)
+        for j in range(1,Nx):
+            if i == j:
+                row.append(i-1)  
+                col.append(j-1)  
+                data.append(2*h/3)  # valeurs sur la diagonale principale    
+            elif abs(i-j) == 1:
+                row.append(i-1)
+                col.append(j-1)
+                data.append(h/6) # valeurs sur les diagonales |i-j| = 1        
     
-        row.append(i-1)
-        col.append(i-1)
-        data.append(2*h/3)       # M_{i,i}
-    
-        if i > 1:
-            row.append(i-1)  
-            col.append(i-2)   
-            data.append(h/6)  # M_{i,i-1}  (j=i-1)
-
     row = numpy.array(row)
     col = numpy.array(col)
     data = numpy.array(data)      
@@ -198,22 +186,17 @@ def assemble_A_DF(Nt,Nx):
     Dt = 1./Nt
     a = Dt/(h*h)
 
+    # on rappelle: range(1, Nx) = { 1, ..., Nx-1 }
     for i in range(1,Nx):
-        # range(1, Nx) = { 1, ..., Nx-1 }
-        
-        if i > 1:
-            row.append(i-1)  
-            col.append(i-2)   
-            data.append(-a)  # A_{i,i-1}  (j=i-1)
-    
-        row.append(i-1)
-        col.append(i-1)
-        data.append(1+2*a)       # A_{i,i}
-
-        if i < Nx-1:
-            row.append(i-1)  
-            col.append(i)  
-            data.append(-a)   # A_{i,i+1}    (j=i+1)    
+        for j in range(1,Nx):
+            if i == j:
+                row.append(i-1)  
+                col.append(j-1)  
+                data.append(1+2*a)  # valeurs sur la diagonale principale    
+            elif abs(i-j) == 1:
+                row.append(i-1)
+                col.append(j-1)
+                data.append(-a) # valeurs sur les diagonales |i-j| = 1
 
     row = numpy.array(row)
     col = numpy.array(col)
@@ -403,7 +386,7 @@ def calcul_erreurs(u_tx, erreur_df_explicite=True):
                     )
 
             else:            
-                # pour comparer, on utilise ici le schema implicite centre pour definir l'erreur locale.
+                # variante (pour comparer): ici le schema implicite sert a definir l'erreur locale.
                 # On peut alors verifier sur les courbes d'erreur que, sans surprise, l'erreur calculee par 
                 # cet indicateur est nulle (a la precision machine pres) lorsque la solution approchee u_tx 
                 # est calculee avec le meme schema implicite centre... 
